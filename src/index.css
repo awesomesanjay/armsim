@@ -1,0 +1,319 @@
+:root {
+  --bg-dark: #1e1e1e;
+  --bg-panel: #252526;
+  --bg-header: #333333;
+  --text-primary: #d4d4d4;
+  --text-secondary: #858585;
+  --accent-blue: #0e639c;
+  --accent-green: #4ec9b0;
+  --border: #3c3c3c;
+  --font-mono: 'Menlo', 'Monaco', 'Courier New', monospace;
+  /* Mac friendly */
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  height: 100vh;
+  overflow: hidden;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.app-container {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  grid-template-rows: 1fr 50px;
+  height: 100%;
+  overflow: hidden;
+  /* Prevent body scroll */
+}
+
+/* Editor Section */
+.editor-section {
+  grid-column: 1;
+  grid-row: 1;
+  background: var(--bg-dark);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.editor-header {
+  background: var(--bg-panel);
+  padding: 8px 15px;
+  height: 35px;
+  /* Fixed height */
+  box-sizing: border-box;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.editor-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  /* The container for textarea/display */
+}
+
+.editor-stack {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+textarea.editor-input,
+.code-display {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-sizing: border-box;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 24px;
+  /* Explicit line height essential for alignment */
+  white-space: pre;
+  overflow: auto;
+  /* Scrollable */
+}
+
+textarea.editor-input {
+  z-index: 2;
+  color: transparent;
+  background: transparent;
+  caret-color: white;
+  resize: none;
+  outline: none;
+  padding-left: 70px;
+  /* Gutter (60px) + Line Content Padding (10px) */
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.code-display {
+  z-index: 1;
+  color: #d4d4d4;
+  background: var(--bg-dark);
+  pointer-events: none;
+  /* Let clicks pass to textarea */
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  /* Hide scrollbars on display since textarea handles it */
+  scrollbar-width: none;
+}
+
+.code-display::-webkit-scrollbar {
+  display: none;
+}
+
+.code-line {
+  display: flex;
+  height: 24px;
+  /* Match line-height */
+  align-items: center;
+}
+
+.code-line.active {
+  background: #37373d;
+  border-left: 2px solid var(--accent-blue);
+}
+
+.gutter {
+  position: sticky;
+  left: 0;
+  width: 60px;
+  background: var(--bg-dark);
+  border-right: 1px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  box-sizing: border-box;
+  color: #858585;
+  font-size: 12px;
+  user-select: none;
+  pointer-events: auto;
+  /* Allow clicks */
+  z-index: 3;
+  /* Above line highlight? No, line highlight is background */
+  /* Wait, if gutter is inside code-line div, it moves with it. */
+  height: 100%;
+}
+
+.breakpoint-dot {
+  color: #ef4444;
+  font-size: 18px;
+  margin-right: 4px;
+  line-height: 10px;
+}
+
+.execution-arrow {
+  color: #fdd835;
+  /* Yellow */
+  font-size: 12px;
+  margin-right: 4px;
+}
+
+.line-content {
+  padding-left: 10px;
+  /* Matches textarea padding calc? */
+  /* textarea padding-left is 60px.
+       code-display padding is 0.
+       gutter width is 60px.
+       line-content starts after gutter.
+       So visually aligned.
+    */
+  flex: 1;
+}
+
+/* Sidebar */
+.sidebar {
+  grid-column: 2;
+  grid-row: 1;
+  background: var(--bg-panel);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background-color: var(--border);
+  overflow: hidden;
+  /* Internal scrolling */
+}
+
+.panel {
+  background: var(--bg-panel);
+  padding: 10px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+td {
+  padding: 2px 4px;
+}
+
+.reg-name {
+  color: #9cdcfe;
+}
+
+.reg-hex {
+  color: #ce9178;
+}
+
+.reg-dec {
+  color: #b5cea8;
+  text-align: right;
+}
+
+.flag {
+  display: inline-block;
+  width: 20px;
+  text-align: center;
+  background: #3c3c3c;
+  margin-right: 4px;
+  padding: 2px 0;
+  border-radius: 2px;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.flag.active {
+  background: var(--accent-blue);
+  color: white;
+  font-weight: bold;
+}
+
+/* Controls */
+.controls-section {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  background: #007acc;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.control-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 0 15px;
+  height: 100%;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s;
+}
+
+.control-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.control-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.mem-cell {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: 2px;
+  text-align: center;
+}
+
+.mem-addr {
+  color: #569cd6;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #424242;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4f4f4f;
+}
